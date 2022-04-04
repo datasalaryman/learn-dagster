@@ -38,3 +38,6 @@ dev: requirements-dev.txt  ## Install dependencies for dev
 
 run: dev ## Run with dev dependencies
 	venv/bin/dagit
+
+test: dev
+	venv/bin/pytest tests
