@@ -4,8 +4,8 @@ from dagster import (
     op, 
     get_dagster_logger, 
     DagsterType, 
-    Input, 
-    Output
+    In, 
+    Out
 )
 
 @op
@@ -69,7 +69,7 @@ SimpleDataFrame = DagsterType(
 
 @op(
     config_schema={"url": str}, 
-    out=Output(SimpleDataFrame)
+    out=Out(SimpleDataFrame)
 )
 def download_csv_configurable(context):
     response = requests.get(context.op_config["url"])
@@ -77,7 +77,7 @@ def download_csv_configurable(context):
     return [row for row in csv.DictReader(lines)]
 
 
-@op(ins={"cereals": Input(SimpleDataFrame)})
+@op(ins={"cereals": In(SimpleDataFrame)})
 def sort_by_calories(cereals):
     sorted_cereals = sorted(cereals, key=lambda cereal: int(cereal["calories"]))
     get_dagster_logger().info(f'Most caloric cereal: {sorted_cereals[-1]["name"]}')
