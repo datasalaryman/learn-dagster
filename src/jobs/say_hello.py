@@ -1,6 +1,6 @@
 from dagster import job
 
-from learn_dagster.ops.hello import (
+from src.ops.hello import (
     download_csv_configurable,
     hello, 
     hello_cereal, 

@@ -1,6 +1,6 @@
 from dagster import RunRequest, sensor
 
-from learn_dagster.jobs.say_hello import say_hello_job
+from src.jobs.say_hello import say_hello_job
 
 
 @sensor(job=say_hello_job)

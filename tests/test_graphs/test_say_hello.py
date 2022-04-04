@@ -1,4 +1,4 @@
-from learn_dagster.jobs.say_hello import (
+from src.jobs.say_hello import (
     say_hello_job, 
     diamond
 )

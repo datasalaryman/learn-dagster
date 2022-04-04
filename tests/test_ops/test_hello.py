@@ -1,4 +1,4 @@
-from learn_dagster.ops.hello import (
+from src.ops.hello import (
     hello, 
     find_highest_calorie_cereal
 )
