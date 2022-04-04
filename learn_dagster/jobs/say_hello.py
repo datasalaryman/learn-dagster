@@ -1,6 +1,11 @@
 from dagster import job
 
-from learn_dagster.ops.hello import hello, hello_cereal
+from learn_dagster.ops.hello import (
+    hello, 
+    hello_cereal, 
+    download_cereals, 
+    find_sugariest
+)
 
 @job
 def say_hello_job():
@@ -15,3 +20,7 @@ def say_hello_job():
 @job
 def hello_cereal_job():
     hello_cereal()
+
+@job
+def serial():
+    find_sugariest(download_cereals())

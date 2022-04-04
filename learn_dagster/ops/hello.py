@@ -18,3 +18,14 @@ def hello_cereal():
     lines = response.text.split("\n")
     cereals = [row for row in csv.DictReader(lines)]
     get_dagster_logger().info(f"Found {len(cereals)} cereals")
+
+@op
+def download_cereals():
+    response = requests.get("https://docs.dagster.io/assets/cereal.csv")
+    lines = response.text.split("\n")
+    return [row for row in csv.DictReader(lines)]
+
+@op
+def find_sugariest(cereals):
+    sorted_by_sugar = sorted(cereals, key=lambda cereal: cereal["sugars"])
+    get_dagster_logger().info(f'{sorted_by_sugar[-1]["name"]} is the sugariest cereal')
