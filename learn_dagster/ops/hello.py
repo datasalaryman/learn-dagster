@@ -1,6 +1,6 @@
 import requests
 import csv
-from dagster import job, op, get_dagster_logger
+from dagster import op, get_dagster_logger
 
 @op
 def hello():
@@ -47,3 +47,16 @@ def display_results(most_calories, most_protein):
     logger = get_dagster_logger()
     logger.info(f"Most caloric cereal: {most_calories}")
     logger.info(f"Most protein-rich cereal: {most_protein}")
+
+
+@op(config_schema={"url": str})
+def download_csv_configurable(context):
+    response = requests.get(context.op_config["url"])
+    lines = response.text.split("\n")
+    return [row for row in csv.DictReader(lines)]
+
+
+@op
+def sort_by_calories(cereals):
+    sorted_cereals = sorted(cereals, key=lambda cereal: int(cereal["calories"]))
+    get_dagster_logger().info(f'Most caloric cereal: {sorted_cereals[-1]["name"]}')

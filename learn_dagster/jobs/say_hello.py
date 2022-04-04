@@ -1,13 +1,15 @@
 from dagster import job
 
 from learn_dagster.ops.hello import (
+    download_csv_configurable,
     hello, 
     hello_cereal, 
     download_cereals, 
     find_sugariest, 
     find_highest_protein_cereal,
     find_highest_calorie_cereal, 
-    display_results
+    display_results,
+    sort_by_calories
 )
 
 @job
@@ -35,3 +37,7 @@ def diamond():
         most_calories=find_highest_calorie_cereal(cereals),
         most_protein=find_highest_protein_cereal(cereals),
     )
+
+@job
+def configurable_job():
+    sort_by_calories(download_csv_configurable())
