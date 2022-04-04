@@ -1,6 +1,6 @@
 from dagster import job
 
-from learn_dagster.ops.hello import hello
+from learn_dagster.ops.hello import hello, hello_cereal
 
 @job
 def say_hello_job():
@@ -11,3 +11,7 @@ def say_hello_job():
     https://docs.dagster.io/concepts/ops-jobs-graphs/jobs-graphs
     """
     hello()
+
+@job
+def hello_cereal_job():
+    hello_cereal()
