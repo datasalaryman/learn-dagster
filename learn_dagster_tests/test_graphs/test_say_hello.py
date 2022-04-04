@@ -1,4 +1,7 @@
-from learn_dagster.jobs.say_hello import say_hello_job
+from learn_dagster.jobs.say_hello import (
+    say_hello_job, 
+    diamond
+)
 
 
 def test_say_hello():
@@ -12,3 +15,8 @@ def test_say_hello():
 
     assert result.success
     assert result.output_for_node("hello") == "Hello, Dagster!"
+
+def test_diamond():
+    res = diamond.execute_in_process()
+    assert res.success
+    assert res.output_for_node("find_highest_protein_cereal") == "Special K"
