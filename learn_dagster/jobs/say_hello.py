@@ -4,7 +4,10 @@ from learn_dagster.ops.hello import (
     hello, 
     hello_cereal, 
     download_cereals, 
-    find_sugariest
+    find_sugariest, 
+    find_highest_protein_cereal,
+    find_highest_calorie_cereal, 
+    display_results
 )
 
 @job
@@ -24,3 +27,11 @@ def hello_cereal_job():
 @job
 def serial():
     find_sugariest(download_cereals())
+
+@job
+def diamond():
+    cereals = download_cereals()
+    display_results(
+        most_calories=find_highest_calorie_cereal(cereals),
+        most_protein=find_highest_protein_cereal(cereals),
+    )
