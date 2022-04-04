@@ -1,6 +1,12 @@
 import requests
 import csv
-from dagster import op, get_dagster_logger
+from dagster import (
+    op, 
+    get_dagster_logger, 
+    DagsterType, 
+    Input, 
+    Output
+)
 
 @op
 def hello():
@@ -49,14 +55,29 @@ def display_results(most_calories, most_protein):
     logger.info(f"Most protein-rich cereal: {most_protein}")
 
 
-@op(config_schema={"url": str})
+def is_list_of_dicts(_, value):
+    return isinstance(value, list) and all(
+        isinstance(element, dict) for element in value
+    )
+
+
+SimpleDataFrame = DagsterType(
+    name="SimpleDataFrame",
+    type_check_fn=is_list_of_dicts,
+    description="A naive representation of a data frame, e.g., as returned by csv.DictReader.",
+)
+
+@op(
+    config_schema={"url": str}, 
+    out=Output(SimpleDataFrame)
+)
 def download_csv_configurable(context):
     response = requests.get(context.op_config["url"])
     lines = response.text.split("\n")
     return [row for row in csv.DictReader(lines)]
 
 
-@op
+@op(ins={"cereals": Input(SimpleDataFrame)})
 def sort_by_calories(cereals):
     sorted_cereals = sorted(cereals, key=lambda cereal: int(cereal["calories"]))
     get_dagster_logger().info(f'Most caloric cereal: {sorted_cereals[-1]["name"]}')
